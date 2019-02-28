@@ -15,9 +15,14 @@ jobs:
     docker:
       - image: circleci/golang:1.11.2
     steps:
+      - run: go get github.com/mitchellh/gox
+      - run: go get github.com/tcnksm/ghr
       - checkout
+      # workaround for https://github.com/golang/go/issues/27925
+      - run: sed -e '/^k8s.io\/client-go /d' -i go.sum
       - run: go vet
-      - run: curl -sL https://git.io/goreleaser | bash
+      - run: gox --osarch 'darwin/amd64 linux/amd64 windows/amd64' -output 'dist/kubectl-hello_{{.OS}}_{{.Arch}}'
+      - run: ghr -u "$CIRCLE_PROJECT_USERNAME" -r "$CIRCLE_PROJECT_REPONAME" "$CIRCLE_TAG" dist
 
 workflows:
   version: 2
