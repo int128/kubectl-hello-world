@@ -40,6 +40,10 @@ type options struct {
 }
 
 func (o *options) Run() error {
-	klog.Infof("Hello World")
+	config, err := o.configFlags.ToRawKubeConfigLoader().RawConfig()
+	if err != nil {
+		return errors.Wrapf(err, "error while loading config")
+	}
+	klog.Infof("Hello World from %s", config.CurrentContext)
 	return nil
 }

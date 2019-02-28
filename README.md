@@ -1,19 +1,16 @@
 # hello-kubectl-plugin
 
-Hello World with kubectl plugin.
+This is a kubectl plugin to say Hello World.
 
-This is based on [kubernetes/sample-cli-plugin](https://github.com/kubernetes/sample-cli-plugin).
+It is based on [kubernetes/sample-cli-plugin](https://github.com/kubernetes/sample-cli-plugin).
 
-
-## TL;DR
 
 ```
-% go build
+% go build -o kubectl-hello
 
-% ./hello-kubectl-plugin
-I0227 14:20:39.461137   15880 hello.go:43] Hello World
+% export PATH=$PATH:$PWD
 
-% ./hello-kubectl-plugin --help
+% kubectl hello --help
 Say hello world
 
 Usage:
