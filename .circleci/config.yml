@@ -1,0 +1,37 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.11.2
+    steps:
+      - run: go get -u golang.org/x/lint/golint
+      - checkout
+      - run: golint
+      # workaround for https://github.com/golang/go/issues/27925
+      - run: sed -e '/^k8s.io\/client-go /d' -i go.sum
+      - run: go vet
+
+  release:
+    docker:
+      - image: circleci/golang:1.11.2
+    steps:
+      - checkout
+      - run: go vet
+      - run: curl -sL https://git.io/goreleaser | bash
+
+workflows:
+  version: 2
+  all:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
+      - release:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /.*/
+          requires:
+            - build

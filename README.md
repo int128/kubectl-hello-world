@@ -1,4 +1,4 @@
-# hello-kubectl-plugin
+# hello-kubectl-plugin [![CircleCI](https://circleci.com/gh/int128/hello-kubectl-plugin.svg?style=shield)](https://circleci.com/gh/int128/hello-kubectl-plugin)
 
 This is a kubectl plugin to say Hello World.
 
@@ -60,3 +60,21 @@ require (
 ```
 
 and run `go mod tidy`.
+
+
+### Checksum mismatch of go.sum
+
+Some module causes checksum mismatch between GOOS such as macOS and Linux.
+
+```
+go: verifying k8s.io/client-go@v10.0.0+incompatible: checksum mismatch
+	downloaded: h1:F1IqCqw7oMBzDkqlcBymRq1450wD0eNqLE9jzUrIi34=
+	go.sum:     h1:+xQQxwjrcIPWDMJBAS+1G2FNk1McoPnb53xkvcDiDqE=
+Exited with code 1
+```
+
+Add the following command on CI for workaround of this.
+
+```sh
+sed -e '/^k8s.io\/client-go /d' -i go.sum
+```
