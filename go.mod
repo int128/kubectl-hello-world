@@ -1,4 +1,4 @@
-module github.com/int128/hello-kubectl-plugin
+module github.com/int128/kubectl-hello-world
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect

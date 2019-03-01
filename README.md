@@ -1,4 +1,4 @@
-# hello-kubectl-plugin [![CircleCI](https://circleci.com/gh/int128/hello-kubectl-plugin.svg?style=shield)](https://circleci.com/gh/int128/hello-kubectl-plugin) [![GoDoc](https://godoc.org/github.com/int128/hello-kubectl-plugin?status.svg)](https://godoc.org/github.com/int128/hello-kubectl-plugin)
+# kubectl-hello-world [![CircleCI](https://circleci.com/gh/int128/kubectl-hello-world.svg?style=shield)](https://circleci.com/gh/int128/kubectl-hello-world) [![GoDoc](https://godoc.org/github.com/int128/kubectl-hello-world?status.svg)](https://godoc.org/github.com/int128/kubectl-hello-world)
 
 This is a kubectl plugin to say Hello World.
 
@@ -6,23 +6,23 @@ It is based on [kubernetes/sample-cli-plugin](https://github.com/kubernetes/samp
 
 ## Getting Started
 
-Download [the latest release](https://github.com/int128/hello-kubectl-plugin/releases) and install it.
+Download [the latest release](https://github.com/int128/kubectl-hello-world/releases) and install it.
 
 ```
-% kubectl hello
+% kubectl hello-world
 I0228 15:19:48.114978   18579 hello.go:47] Hello World from default
 ```
 
 ```
-% kubectl hello --help
+% kubectl hello-world --help
 Say hello world
 
 Usage:
-  hello [flags]
+  hello-world [flags]
 
 Examples:
 
-	kubectl hello
+	kubectl hello-world
 
 
 Flags:
@@ -34,7 +34,7 @@ Flags:
       --client-key string              Path to a client key file for TLS
       --cluster string                 The name of the kubeconfig cluster to use
       --context string                 The name of the kubeconfig context to use
-  -h, --help                           help for hello
+  -h, --help                           help for hello-world
       --insecure-skip-tls-verify       If true, the server's certificate will not be checked for validity. This will make your HTTPS connections insecure
       --kubeconfig string              Path to the kubeconfig file to use for CLI requests.
   -n, --namespace string               If present, the namespace scope for this CLI request
@@ -54,9 +54,9 @@ Feel free to open issues and pull requests.
 You can build and run it as follows:
 
 ```
-% go build -o kubectl-hello
+% go build -o kubectl-hello_world
 % export PATH=$PATH:$PWD
-% kubectl hello
+% kubectl hello-world
 ```
 
 ### Dependency hell
