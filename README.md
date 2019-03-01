@@ -6,7 +6,7 @@ It is based on [kubernetes/sample-cli-plugin](https://github.com/kubernetes/samp
 
 ## Getting Started
 
-Download [the latest release](https://github.com/int128/kubectl-hello-world/releases) and install it.
+Download [the latest release](https://github.com/int128/kubectl-hello-world/releases) and install it as `/usr/local/bin/kubectl-hello_world`.
 
 ```
 % kubectl hello-world
@@ -71,7 +71,7 @@ For example,
 ```
 kubectl hello-world
 ↓
-/usr/bin/kubectl-hello_world
+/usr/local/bin/kubectl-hello_world
 ```
 
 ### Dependency hell
