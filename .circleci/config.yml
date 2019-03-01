@@ -15,7 +15,9 @@ jobs:
       - run: make dist
       # release to GitHub on tag push
       - run: |
-          [ "$CIRCLE_TAG" ] && ghr -u "$CIRCLE_PROJECT_USERNAME" -r "$CIRCLE_PROJECT_REPONAME" "$CIRCLE_TAG" dist
+          if [ "$CIRCLE_TAG" ]; then
+            ghr -u "$CIRCLE_PROJECT_USERNAME" -r "$CIRCLE_PROJECT_REPONAME" "$CIRCLE_TAG" dist
+          fi
 
 workflows:
   version: 2
