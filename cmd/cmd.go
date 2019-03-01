@@ -10,7 +10,7 @@ import (
 )
 
 var example = `
-	%[1]s hello
+	%[1]s hello-world
 `
 
 func New(streams genericclioptions.IOStreams) *cobra.Command {
@@ -19,7 +19,7 @@ func New(streams genericclioptions.IOStreams) *cobra.Command {
 		configFlags: genericclioptions.NewConfigFlags(),
 	}
 	cmd := &cobra.Command{
-		Use:          "hello [flags]",
+		Use:          "hello-world [flags]",
 		Short:        "Say hello world",
 		Example:      fmt.Sprintf(example, "kubectl"),
 		SilenceUsage: true,

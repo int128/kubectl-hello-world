@@ -1,6 +1,6 @@
-# kubectl-hello-world [![CircleCI](https://circleci.com/gh/int128/kubectl-hello-world.svg?style=shield)](https://circleci.com/gh/int128/kubectl-hello-world) [![GoDoc](https://godoc.org/github.com/int128/kubectl-hello-world?status.svg)](https://godoc.org/github.com/int128/kubectl-hello-world)
+# kubectl hello-world [![CircleCI](https://circleci.com/gh/int128/kubectl-hello-world.svg?style=shield)](https://circleci.com/gh/int128/kubectl-hello-world) [![GoDoc](https://godoc.org/github.com/int128/kubectl-hello-world?status.svg)](https://godoc.org/github.com/int128/kubectl-hello-world)
 
-This is a kubectl plugin to say Hello World.
+This is a kubectl plugin to just say "Hello World".
 
 It is based on [kubernetes/sample-cli-plugin](https://github.com/kubernetes/sample-cli-plugin).
 
@@ -54,9 +54,24 @@ Feel free to open issues and pull requests.
 You can build and run it as follows:
 
 ```
-% go build -o kubectl-hello_world
-% export PATH=$PATH:$PWD
-% kubectl hello-world
+% make
+go build -o kubectl-hello_world
+
+% make run
+PATH="$PATH:$PWD" kubectl hello-world
+```
+
+### Naming
+
+See [the naming guide of krew](https://github.com/GoogleContainerTools/krew/blob/master/docs/NAMING_GUIDE.md).
+
+If name of the kubectl command contains `-`, you need to replace `-` with `_`.
+For example,
+
+```
+kubectl hello-world
+↓
+/usr/bin/kubectl-hello_world
 ```
 
 ### Dependency hell

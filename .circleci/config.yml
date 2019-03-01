@@ -4,25 +4,18 @@ jobs:
     docker:
       - image: circleci/golang:1.11.2
     steps:
-      - run: go get -u golang.org/x/lint/golint
+      - run: go get golang.org/x/lint/golint
+      - run: go get github.com/mitchellh/gox
+      - run: go get github.com/tcnksm/ghr
       - checkout
       - run: golint
       # workaround for https://github.com/golang/go/issues/27925
       - run: sed -e '/^k8s.io\/client-go /d' -i go.sum
       - run: go vet
-
-  release:
-    docker:
-      - image: circleci/golang:1.11.2
-    steps:
-      - run: go get github.com/mitchellh/gox
-      - run: go get github.com/tcnksm/ghr
-      - checkout
-      # workaround for https://github.com/golang/go/issues/27925
-      - run: sed -e '/^k8s.io\/client-go /d' -i go.sum
-      - run: go vet
-      - run: gox --osarch 'darwin/amd64 linux/amd64 windows/amd64' -output 'dist/kubectl-hello_{{.OS}}_{{.Arch}}'
-      - run: ghr -u "$CIRCLE_PROJECT_USERNAME" -r "$CIRCLE_PROJECT_REPONAME" "$CIRCLE_TAG" dist
+      - run: make dist
+      # release to GitHub on tag push
+      - run: |
+          [ "$CIRCLE_TAG" ] && ghr -u "$CIRCLE_PROJECT_USERNAME" -r "$CIRCLE_PROJECT_REPONAME" "$CIRCLE_TAG" dist
 
 workflows:
   version: 2
@@ -32,11 +25,3 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - release:
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /.*/
-          requires:
-            - build

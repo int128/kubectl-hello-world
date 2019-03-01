@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	flags := pflag.NewFlagSet("kubectl-hello-world", pflag.ExitOnError)
+	flags := pflag.NewFlagSet("kubectl-hello_world", pflag.ExitOnError)
 	pflag.CommandLine = flags
 
 	root := cmd.New(genericclioptions.IOStreams{In: os.Stdin, Out: os.Stdout, ErrOut: os.Stderr})
