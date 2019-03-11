@@ -21,11 +21,11 @@ dist/bin: check
 release_bin: dist/bin
 	ghr -u "$(CIRCLE_PROJECT_USERNAME)" -r "$(CIRCLE_PROJECT_REPONAME)" -b "$$(ghch -F markdown --latest)" "$(CIRCLE_TAG)" dist/bin
 
-dist/$(TARGET).rb: dist/bin
-	./homebrew.sh dist/bin/$(TARGET)_darwin_amd64 > dist/$(TARGET).rb
+dist/kubectl-hello-world.rb: dist/bin
+	./homebrew.sh dist/bin/$(TARGET)_darwin_amd64 > dist/kubectl-hello-world.rb
 
-release_homebrew: dist/$(TARGET).rb
-	ghcp -u "$(CIRCLE_PROJECT_USERNAME)" -r "homebrew-$(CIRCLE_PROJECT_REPONAME)" -m "$(CIRCLE_TAG)" -C dist/ $(TARGET).rb
+release_homebrew: dist/kubectl-hello-world.rb
+	ghcp -u "$(CIRCLE_PROJECT_USERNAME)" -r "homebrew-$(CIRCLE_PROJECT_REPONAME)" -m "$(CIRCLE_TAG)" -C dist/ kubectl-hello-world.rb
 
 release: release_bin release_homebrew
 
