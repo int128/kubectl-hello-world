@@ -7,16 +7,14 @@ jobs:
       - run: go get golang.org/x/lint/golint
       - run: go get github.com/mitchellh/gox
       - run: go get github.com/tcnksm/ghr
+      - run: go get github.com/int128/ghcp
       - checkout
-      - run: golint
       # workaround for https://github.com/golang/go/issues/27925
       - run: sed -e '/^k8s.io\/client-go /d' -i go.sum
-      - run: go vet
-      - run: make dist
-      # release to GitHub on tag push
+      - run: make
       - run: |
           if [ "$CIRCLE_TAG" ]; then
-            ghr -u "$CIRCLE_PROJECT_USERNAME" -r "$CIRCLE_PROJECT_REPONAME" "$CIRCLE_TAG" dist
+            make release
           fi
 
 workflows:
