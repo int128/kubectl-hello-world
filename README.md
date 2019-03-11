@@ -1,12 +1,27 @@
-# kubectl hello-world [![CircleCI](https://circleci.com/gh/int128/kubectl-hello-world.svg?style=shield)](https://circleci.com/gh/int128/kubectl-hello-world) [![GoDoc](https://godoc.org/github.com/int128/kubectl-hello-world?status.svg)](https://godoc.org/github.com/int128/kubectl-hello-world)
+# kubectl hello-world [![CircleCI](https://circleci.com/gh/int128/kubectl-hello-world.svg?style=shield)](https://circleci.com/gh/int128/kubectl-hello-world)
 
-This is a kubectl plugin to just say "Hello World".
+This is a kubectl plugin to just say `Hello World`.
+It is based on [kubernetes/sample-cli-plugin](https://github.com/kubernetes/sample-cli-plugin) and demonstrates the following topics:
 
-It is based on [kubernetes/sample-cli-plugin](https://github.com/kubernetes/sample-cli-plugin).
+- How to integrate k8s packages using Go Modules (e.g. `k8s.io/cli-runtime` and `k8s.io/client-go`).
+- How to make a kubectl plugin.
+- How to ship a kubectl plugin as a Homebrew formula.
+
 
 ## Getting Started
 
-Download [the latest release](https://github.com/int128/kubectl-hello-world/releases) and install it as `/usr/local/bin/kubectl-hello_world`.
+Install [the latest release](https://github.com/int128/kubectl-hello-world/releases) as `kubectl-hello_world`.
+
+```sh
+# GitHub Releases
+curl -L -o /usr/local/bin/kubectl-hello_world https://github.com/int128/kubectl-hello-world/releases/download/v1.0.1/kubectl-hello_world_linux_amd64
+
+# Homebrew
+brew tap int128/kubectl-hello-world
+brew install kubectl-hello-world
+```
+
+Examples:
 
 ```
 % kubectl hello-world
@@ -44,22 +59,7 @@ Flags:
       --user string                    The name of the kubeconfig user to use
 ```
 
-## Contributions
-
-This is an open source software.
-Feel free to open issues and pull requests.
-
-## Development
-
-You can build and run it as follows:
-
-```
-% make
-go build -o kubectl-hello_world
-
-% make run
-PATH="$PATH:$PWD" kubectl hello-world
-```
+## Tips
 
 ### Naming
 
@@ -108,4 +108,20 @@ add the following command on CI for workaround.
 
 ```sh
 sed -e '/^k8s.io\/client-go /d' -i go.sum
+```
+
+
+## Contributions
+
+This is an open source software.
+Feel free to open issues and pull requests.
+
+You can build and run this as follows:
+
+```
+% make
+go build -o kubectl-hello_world
+
+% make run
+PATH="$PATH:$PWD" kubectl hello-world
 ```
