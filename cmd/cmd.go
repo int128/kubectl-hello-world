@@ -2,7 +2,9 @@ package cmd
 
 import (
 	"context"
+	"fmt"
 	"github.com/spf13/pflag"
+	"k8s.io/client-go/tools/clientcmd"
 
 	"k8s.io/cli-runtime/pkg/genericclioptions"
 	"k8s.io/klog"
@@ -28,6 +30,8 @@ func (c *Cmd) Run(ctx context.Context, args []string) int {
 	var o cmdOptions
 	o.ConfigFlags = genericclioptions.NewConfigFlags()
 	o.ConfigFlags.AddFlags(f)
+	kcfgFlag := f.Lookup("kubeconfig")
+	kcfgFlag.Usage = fmt.Sprintf("%s [$%s]", kcfgFlag.Usage, clientcmd.RecommendedConfigPathEnvVar)
 
 	if err := f.Parse(args[1:]); err != nil {
 		if err == pflag.ErrHelp {
