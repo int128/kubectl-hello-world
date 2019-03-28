@@ -1,49 +1,54 @@
 package cmd
 
 import (
-	"fmt"
+	"context"
+	"github.com/spf13/pflag"
 
-	"github.com/pkg/errors"
-	"github.com/spf13/cobra"
 	"k8s.io/cli-runtime/pkg/genericclioptions"
 	"k8s.io/klog"
 )
 
-var example = `
-	%[1]s hello-world
-`
+const usage = `Help:
 
-func New(streams genericclioptions.IOStreams) *cobra.Command {
-	o := &options{
-		IOStreams:   streams,
-		configFlags: genericclioptions.NewConfigFlags(),
+Usage: %s [options] [args...]
+
+  A kubectl plugin just saying Hello World!
+
+Options:
+%s`
+
+type Cmd struct{}
+
+func (c *Cmd) Run(ctx context.Context, args []string) int {
+	f := pflag.NewFlagSet(args[0], pflag.ContinueOnError)
+	f.Usage = func() {
+		klog.Infof(usage, args[0], f.FlagUsages())
 	}
-	cmd := &cobra.Command{
-		Use:          "hello-world [flags]",
-		Short:        "Say hello world",
-		Example:      fmt.Sprintf(example, "kubectl"),
-		SilenceUsage: true,
-		RunE: func(c *cobra.Command, args []string) error {
-			if err := o.Run(); err != nil {
-				return errors.Wrapf(err, "error while running command")
-			}
-			return nil
-		},
+
+	var o cmdOptions
+	o.ConfigFlags = genericclioptions.NewConfigFlags()
+	o.ConfigFlags.AddFlags(f)
+
+	if err := f.Parse(args[1:]); err != nil {
+		if err == pflag.ErrHelp {
+			return 1
+		}
+		klog.Errorf("Invalid arguments: %s", err)
+		return 1
 	}
-	o.configFlags.AddFlags(cmd.Flags())
-	return cmd
-}
+	o.Args = f.Args()
 
-type options struct {
-	genericclioptions.IOStreams
-	configFlags *genericclioptions.ConfigFlags
-}
-
-func (o *options) Run() error {
-	config, err := o.configFlags.ToRawKubeConfigLoader().RawConfig()
+	cfg, err := o.ConfigFlags.ToRawKubeConfigLoader().RawConfig()
 	if err != nil {
-		return errors.Wrapf(err, "error while loading config")
+		klog.Errorf("Could not load kubeconfig: %s", err)
+		return 1
 	}
-	klog.Infof("Hello World from %s", config.CurrentContext)
-	return nil
+
+	klog.Infof("Hello World from %s", cfg.CurrentContext)
+	return 0
+}
+
+type cmdOptions struct {
+	ConfigFlags *genericclioptions.ConfigFlags
+	Args        []string
 }

@@ -25,22 +25,18 @@ Examples:
 
 ```
 % kubectl hello-world
-I0228 15:19:48.114978   18579 hello.go:47] Hello World from default
+I0328 10:07:22.492909    4901 cmd.go:47] Hello World from example.k8s.local
 ```
 
 ```
 % kubectl hello-world --help
-Say hello world
+I0328 10:07:28.928283    4915 cmd.go:25] Help:
 
-Usage:
-  hello-world [flags]
+Usage: kubectl-hello_world [options] [args...]
 
-Examples:
+  A kubectl plugin just saying Hello World!
 
-	kubectl hello-world
-
-
-Flags:
+Options:
       --as string                      Username to impersonate for the operation
       --as-group stringArray           Group to impersonate for the operation, this flag can be repeated to specify multiple groups.
       --cache-dir string               Default HTTP cache directory (default "~/.kube/http-cache")
@@ -49,7 +45,6 @@ Flags:
       --client-key string              Path to a client key file for TLS
       --cluster string                 The name of the kubeconfig cluster to use
       --context string                 The name of the kubeconfig context to use
-  -h, --help                           help for hello-world
       --insecure-skip-tls-verify       If true, the server's certificate will not be checked for validity. This will make your HTTPS connections insecure
       --kubeconfig string              Path to the kubeconfig file to use for CLI requests.
   -n, --namespace string               If present, the namespace scope for this CLI request
