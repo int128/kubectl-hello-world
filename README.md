@@ -14,7 +14,7 @@ Install [the latest release](https://github.com/int128/kubectl-hello-world/relea
 
 ```sh
 # GitHub Releases
-curl -L -o /usr/local/bin/kubectl-hello_world https://github.com/int128/kubectl-hello-world/releases/download/v1.0.1/kubectl-hello_world_linux_amd64
+curl -LO https://github.com/int128/kubectl-hello-world/releases/download/v1.0.1/kubectl-hello_world_linux_amd64.zip
 
 # Homebrew
 brew tap int128/kubectl-hello-world

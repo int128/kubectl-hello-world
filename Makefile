@@ -1,34 +1,38 @@
+NAME := kubectl-hello-world
 TARGET := kubectl-hello_world
-OSARCH := darwin/amd64 linux/amd64 windows/amd64
+CIRCLE_TAG ?= snapshot
+LDFLAGS :=
 
-.PHONY: check run release_bin release_homebrew release clean
+.PHONY: check run release clean
 
-all: $(TARGET)
+all: build/bin/$(TARGET)
 
 check:
 	golint
 	go vet
 
-$(TARGET): check
-	go build -o $@
+build/bin/$(TARGET): check $(wildcard *.go)
+	go build -o $@ -ldflags "$(LDFLAGS)"
 
-run: $(TARGET)
-	PATH="$$PATH:$$PWD" kubectl hello-world -h
+run: build/bin/$(TARGET)
+	-PATH=build/bin:$(PATH) kubectl hello-world -h
 
-dist/bin: check
-	gox --osarch '$(OSARCH)' -output 'dist/bin/$(TARGET)_{{.OS}}_{{.Arch}}'
+build/dist:
+	goxz -n "$(NAME)" -o "$(TARGET)" -build-ldflags "$(LDFLAGS)" -d $@
+	cd $@ && shasum -a 256 -b * > $(TARGET)_sha256.txt
 
-release_bin: dist/bin
-	ghr -u "$(CIRCLE_PROJECT_USERNAME)" -r "$(CIRCLE_PROJECT_REPONAME)" -b "$$(ghch -F markdown --latest)" "$(CIRCLE_TAG)" dist/bin
+build/$(NAME).rb: build/dist
+	./homebrew.sh build/dist/$(NAME)_darwin_amd64.zip > $@
 
-dist/kubectl-hello-world.rb: dist/bin
-	./homebrew.sh dist/bin/$(TARGET)_darwin_amd64 > dist/kubectl-hello-world.rb
-
-release_homebrew: dist/kubectl-hello-world.rb
-	ghcp -u "$(CIRCLE_PROJECT_USERNAME)" -r "homebrew-$(CIRCLE_PROJECT_REPONAME)" -m "$(CIRCLE_TAG)" -C dist/ kubectl-hello-world.rb
-
-release: release_bin release_homebrew
+release: build/dist build/$(NAME).rb
+	# GitHub Releases
+	ghr -u "$(CIRCLE_PROJECT_USERNAME)" -r "$(CIRCLE_PROJECT_REPONAME)" \
+		-b "$$(ghch -F markdown --latest)" \
+		"$(CIRCLE_TAG)" build/dist
+	# Homebrew tap
+	ghcp -u "$(CIRCLE_PROJECT_USERNAME)" -r "homebrew-$(CIRCLE_PROJECT_REPONAME)" \
+		-m "$(CIRCLE_TAG)" \
+		-C build/ $(NAME).rb
 
 clean:
-	-rm "$(TARGET)"
-	-rm -r dist/
+	-rm -r build/
