@@ -13,7 +13,7 @@ class KubectlHelloWorld < Formula
   sha256 "${dist_sha256}"
 
   def install
-    bin.install "kubectl-hello-world_darwin_amd64/kubectl-hello_world" => "kubectl-hello_world"
+    bin.install "kubectl-hello_world"
   end
 
   test do
