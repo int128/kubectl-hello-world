@@ -10,13 +10,16 @@ It is based on [kubernetes/sample-cli-plugin](https://github.com/kubernetes/samp
 
 ## Getting Started
 
-Install [the latest release](https://github.com/int128/kubectl-hello-world/releases) as `kubectl-hello_world`.
+Download [the latest release](https://github.com/int128/kubectl-hello-world/releases) and extract `kubectl-hello_world` from the archive:
 
 ```sh
-# GitHub Releases
-curl -LO https://github.com/int128/kubectl-hello-world/releases/download/v1.0.1/kubectl-hello_world_linux_amd64.zip
+curl -LO https://github.com/int128/kubectl-hello-world/releases/download/v1.0.2/kubectl-hello_world_linux_amd64.zip
+unzip kubectl-hello_world_linux_amd64.zip
+```
 
-# Homebrew
+or install by Homebrew tap:
+
+```sh
 brew tap int128/kubectl-hello-world
 brew install kubectl-hello-world
 ```
