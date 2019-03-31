@@ -1,38 +1,65 @@
 NAME := kubectl-hello-world
 TARGET := kubectl-hello_world
-CIRCLE_TAG ?= snapshot
 LDFLAGS :=
+CIRCLE_TAG ?= v0.0.0
+BUILD_DIR := build
+DIST_DIR := $(BUILD_DIR)/dist
 
-.PHONY: check run release clean
+# targets for GitHub Releases
+DIST_TARGET += $(DIST_DIR)/$(NAME)_linux_amd64.zip
+DIST_TARGET += $(DIST_DIR)/$(NAME)_linux_amd64.zip.sha256
+DIST_TARGET += $(DIST_DIR)/$(NAME)_darwin_amd64.zip
+DIST_TARGET += $(DIST_DIR)/$(NAME)_darwin_amd64.zip.sha256
+DIST_TARGET += $(DIST_DIR)/$(NAME)_windows_amd64.zip
+DIST_TARGET += $(DIST_DIR)/$(NAME)_windows_amd64.zip.sha256
 
-all: build/bin/$(TARGET)
+.PHONY: all
+all: $(BUILD_DIR)/$(TARGET)
 
+.PHONY: clean
 check:
 	golint
 	go vet
 
-build/bin/$(TARGET): check $(wildcard *.go)
-	go build -o $@ -ldflags "$(LDFLAGS)"
+$(BUILD_DIR)/$(TARGET):
+	go build -o "$@" -ldflags "$(LDFLAGS)"
 
-run: build/bin/$(TARGET)
-	-PATH=build/bin:$(PATH) kubectl hello-world -h
+.PHONY: run
+run: $(BUILD_DIR)/$(TARGET)
+	-PATH="$(BUILD_DIR):$(PATH)" kubectl hello-world -h
 
-build/dist:
-	goxz -n "$(NAME)" -o "$(TARGET)" -build-ldflags "$(LDFLAGS)" -d $@
-	cd $@ && shasum -a 256 -b * > $(TARGET)_sha256.txt
+.PHONY: dist
+dist: $(DIST_TARGET)
 
-build/$(NAME).rb: build/dist
-	./homebrew.sh build/dist/$(NAME)_darwin_amd64.zip > $@
+$(BUILD_DIR)/osarch/%/$(TARGET):
+	GOOS=$(firstword $(subst _, ,$*)) \
+	GOARCH=$(lastword $(subst _, ,$*)) \
+	go build -o "$@" -ldflags "$(LDFLAGS)"
 
-release: build/dist build/$(NAME).rb
-	# GitHub Releases
+$(DIST_DIR)/$(NAME)_%.zip: $(BUILD_DIR)/osarch/%/$(TARGET)
+	mkdir -p "$(@D)"
+	cd "$(<D)" && zip "$(abspath $@)" "$(TARGET)"
+	zip "$(abspath $@)" LICENSE
+
+%.sha256: %
+	shasum -a 256 -b "$<" | cut -f1 -d' ' > "$@"
+
+.PHONY: homebrew
+homebrew: $(BUILD_DIR)/homebrew/$(NAME).rb
+
+$(BUILD_DIR)/homebrew/$(NAME).rb: $(DIST_DIR)/$(NAME)_darwin_amd64.zip.sha256
+	mkdir -p "$(@D)"
+	./homebrew.sh "$(CIRCLE_TAG)" "$(shell cat $<)" > "$@"
+
+.PHONY: release
+release: dist homebrew
 	ghr -u "$(CIRCLE_PROJECT_USERNAME)" -r "$(CIRCLE_PROJECT_REPONAME)" \
 		-b "$$(ghch -F markdown --latest)" \
-		"$(CIRCLE_TAG)" build/dist
-	# Homebrew tap
+		"$(CIRCLE_TAG)" "$(DIST_DIR)"
 	ghcp -u "$(CIRCLE_PROJECT_USERNAME)" -r "homebrew-$(CIRCLE_PROJECT_REPONAME)" \
 		-m "$(CIRCLE_TAG)" \
-		-C build/ $(NAME).rb
+		-C "$(BUILD_DIR)/homebrew" "$(NAME).rb"
 
+.PHONY: clean
 clean:
-	-rm -r build/
+	-rm -r $(BUILD_DIR)/
