@@ -1,0 +1,40 @@
+apiVersion: krew.googlecontainertools.github.com/v1alpha2
+kind: Plugin
+metadata:
+  name: hello-world
+spec:
+  shortDescription: Say Hello World
+  description: An example of kubectl plugin using k8s.io/cli-runtime written in Go, just saying Hello World!
+  homepage: https://github.com/int128/kubectl-hello-world
+  version: "${CIRCLE_TAG}"
+  platforms:
+    - uri: "https://github.com/int128/kubectl-hello-world/releases/download/${CIRCLE_TAG}/kubectl-hello-world_linux_amd64.zip"
+      sha256: "$(cat build/dist/kubectl-hello-world_linux_amd64.zip.sha256)"
+      bin: kubectl-hello_world
+      files:
+        - from: "kubectl-hello_world"
+          to: "."
+      selector:
+        matchLabels:
+          os: linux
+          arch: amd64
+    - uri: "https://github.com/int128/kubectl-hello-world/releases/download/${CIRCLE_TAG}/kubectl-hello-world_darwin_amd64.zip"
+      sha256: "$(cat build/dist/kubectl-hello-world_darwin_amd64.zip.sha256)"
+      bin: kubectl-hello_world
+      files:
+        - from: "kubectl-hello_world"
+          to: "."
+      selector:
+        matchLabels:
+          os: darwin
+          arch: amd64
+    - uri: "https://github.com/int128/kubectl-hello-world/releases/download/${CIRCLE_TAG}/kubectl-hello-world_windows_amd64.zip"
+      sha256: "$(cat build/dist/kubectl-hello-world_windows_amd64.zip.sha256)"
+      bin: kubectl-hello_world
+      files:
+        - from: "kubectl-hello_world"
+          to: "."
+      selector:
+        matchLabels:
+          os: windows
+          arch: amd64
