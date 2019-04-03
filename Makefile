@@ -19,7 +19,10 @@ run: $(BUILD_DIR)/$(TARGET)
 	-PATH="$(BUILD_DIR):$(PATH)" kubectl hello-world -h
 
 dist:
-	VERSION="$(CIRCLE_TAG)" goxzst -d "$(BUILD_DIR)/dist" -t "hello-world.yaml kubectl-hello-world.rb" -- -ldflags "$(LDFLAGS)"
+	VERSION="$(CIRCLE_TAG)" goxzst \
+		-d "$(BUILD_DIR)/dist" -o "$(TARGET)" \
+		-t "hello-world.yaml kubectl-hello-world.rb" \
+		-- -ldflags "$(LDFLAGS)"
 	mv "$(BUILD_DIR)/dist/kubectl-hello-world.rb" "$(BUILD_DIR)/kubectl-hello-world.rb"
 
 release: dist

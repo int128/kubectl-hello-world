@@ -8,8 +8,8 @@ spec:
   homepage: https://github.com/int128/kubectl-hello-world
   version: {{ env "VERSION" }}
   platforms:
-    - uri: https://github.com/int128/kubectl-hello-world/releases/download/{{ env "VERSION" }}/kubectl-hello-world_linux_amd64.zip
-      sha256: {{ .linux_amd64_zip_sha256 }}
+    - uri: https://github.com/int128/kubectl-hello-world/releases/download/{{ env "VERSION" }}/kubectl-hello_world_linux_amd64.zip
+      sha256: "{{ .linux_amd64_zip_sha256 }}"
       bin: kubectl-hello_world
       files:
         - from: "kubectl-hello_world"
@@ -18,8 +18,8 @@ spec:
         matchLabels:
           os: linux
           arch: amd64
-    - uri: https://github.com/int128/kubectl-hello-world/releases/download/{{ env "VERSION" }}/kubectl-hello-world_darwin_amd64.zip
-      sha256: {{ .darwin_amd64_zip_sha256 }}
+    - uri: https://github.com/int128/kubectl-hello-world/releases/download/{{ env "VERSION" }}/kubectl-hello_world_darwin_amd64.zip
+      sha256: "{{ .darwin_amd64_zip_sha256 }}"
       bin: kubectl-hello_world
       files:
         - from: "kubectl-hello_world"
@@ -28,8 +28,8 @@ spec:
         matchLabels:
           os: darwin
           arch: amd64
-    - uri: https://github.com/int128/kubectl-hello-world/releases/download/{{ env "VERSION" }}/kubectl-hello-world_windows_amd64.zip
-      sha256: {{ .windows_amd64_zip_sha256 }}
+    - uri: https://github.com/int128/kubectl-hello-world/releases/download/{{ env "VERSION" }}/kubectl-hello_world_windows_amd64.zip
+      sha256: "{{ .windows_amd64_zip_sha256 }}"
       bin: kubectl-hello_world
       files:
         - from: "kubectl-hello_world"
