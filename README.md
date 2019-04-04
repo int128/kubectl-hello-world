@@ -13,7 +13,7 @@ It is based on [kubernetes/sample-cli-plugin](https://github.com/kubernetes/samp
 Download [the latest release](https://github.com/int128/kubectl-hello-world/releases) and extract `kubectl-hello_world` from the archive:
 
 ```sh
-curl -LO https://github.com/int128/kubectl-hello-world/releases/download/v1.0.2/kubectl-hello_world_linux_amd64.zip
+curl -LO https://github.com/int128/kubectl-hello-world/releases/download/v1.0.4/kubectl-hello_world_linux_amd64.zip
 unzip kubectl-hello_world_linux_amd64.zip
 ```
 
@@ -22,6 +22,13 @@ or install by Homebrew tap:
 ```sh
 brew tap int128/kubectl-hello-world
 brew install kubectl-hello-world
+```
+
+or install by krew:
+
+```sh
+curl -LO https://github.com/int128/kubectl-hello-world/releases/download/v1.0.4/hello-world.yaml
+kubectl krew install --manifest hello-world.yaml
 ```
 
 Examples:
